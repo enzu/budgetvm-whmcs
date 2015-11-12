@@ -1,4 +1,7 @@
 # budgetvm-whmcs
+* Downloadable Documentation
+ * [Word Installation Guide .docx](docs/install_guide.docx)
+ * [Word Installation Guide .pdf](docs/install_guide.pdf)
 * WHMCS Version 5.x
  * /v5/
 * WHMCS Version 6.x
