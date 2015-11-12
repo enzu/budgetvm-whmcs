@@ -442,7 +442,7 @@ function budgetvm_powerOn(array $params)
     $var = new stdclass();
     $var->post = new stdclass();
     $var->post->service = $params['customfields']['BudgetVM Service ID'];
-    $var->post->action   = "on";
+    $var->post->action  = "on";
     $return             = $update->call("v2", "device", "power", "post", $var);
     if($return->success == true){
       return 'success';
@@ -715,186 +715,185 @@ function budgetvm_ClientArea(array $params)
 {
   // Determine the requested action and set service call parameters based on
   // the action.
-  $requestedAction            = isset($_REQUEST['customAction']) ? $_REQUEST['customAction'] : '';
-  $service                    = $params['serviceid'];
-  $bvmid                      = $params['customfields']['BudgetVM Service ID'];
-  $var                        = new stdclass();
-  $var->post                  = new stdclass();
-  $var->post->service         = $bvmid;
-  $budgetvm->bvmid            = $bvmid;
-  $budgetvm->service          = $service;
-  $type                       = new BudgetVM_Api($params['serverpassword']);
-  $type                       = $type->call("v2", "device", "type", "get", $var); 
-  $budgetvm->type             = $type->result;
+  $requestedAction              = isset($_REQUEST['customAction']) ? $_REQUEST['customAction'] : '';
+  $service                      = $params['serviceid'];
+  $bvmid                        = $params['customfields']['BudgetVM Service ID'];
+  $var                          = new stdclass();
+  $var->post                    = new stdclass();
+  $var->post->service           = $bvmid;
+  $budgetvm->bvmid              = $bvmid;
+  $budgetvm->service            = $service;
+  $type                         = new BudgetVM_Api($params['serverpassword']);
+  $type                         = $type->call("v2", "device", "type", "get", $var); 
+  $budgetvm->type               = $type->result;
   if($requestedAction == "manage"){
     
-    $serviceAction            = 'get_usage';
-    $templateFile             = 'templates/manage.tpl';
+    $serviceAction              = 'get_usage';
+    $templateFile               = 'templates/manage.tpl';
   }elseif ($requestedAction == 'reverse') {
     
     if($_SERVER['REQUEST_METHOD'] == "POST" && is_array($_POST['update'])){
-      $update                 = new BudgetVM_Api($params['serverpassword']);
-      $var->post->records     = json_encode($_POST['update']);
-      $budgetvm->return       = $update->call("v2", "dns", "reverse", "post", $var);
+      $update                   = new BudgetVM_Api($params['serverpassword']);
+      $var->post->records       = json_encode($_POST['update']);
+      $budgetvm->return         = $update->call("v2", "dns", "reverse", "post", $var);
       if(is_object($budgetvm->return->result)){
-        $fixed                = "";
+        $fixed                  = "";
         foreach($budgetvm->return->result as $ip=>$ret){
-          $fixed              .= $ip . " - " . $ret . "<br>" . PHP_EOL;
+          $fixed                .= $ip . " - " . $ret . "<br>" . PHP_EOL;
         }
         $budgetvm->return->result= $fixed;
       }
     }else{
-      $budgetvm->return       = NULL;
+      $budgetvm->return         = NULL;
     }
-    $netblocks                = new BudgetVM_Api($params['serverpassword']);
-    $budgetvm->netblocks      = $netblocks->call("v2", "network", "netblock", "get", $var);
+    $netblocks                  = new BudgetVM_Api($params['serverpassword']);
+    $budgetvm->netblocks        = $netblocks->call("v2", "network", "netblock", "get", $var);
       
-    $serviceAction            = 'get_usage';
-    $templateFile             = 'templates/rdns.tpl';
+    $serviceAction              = 'get_usage';
+    $templateFile               = 'templates/rdns.tpl';
   }elseif ($requestedAction == 'network') {
     
-    $bandwidth                = new BudgetVM_Api($params['serverpassword']);
+    $bandwidth                  = new BudgetVM_Api($params['serverpassword']);
     if($budgetvm->type == "dedicated"){
       if(isset($_GET['period'])){
         switch($_GET['period']){
           case "hour";
-            $var->post->start = strtotime("-1 hour");
+            $var->post->start   = strtotime("-1 hour");
             break;
           case "day";
-            $var->post->start = strtotime("-1 day");
+            $var->post->start   = strtotime("-1 day");
             break;
           case "week";
-            $var->post->start = strtotime("-1 week");
+            $var->post->start   = strtotime("-1 week");
             break;
           case "month";
-            $var->post->start = strtotime("-1 month");
+            $var->post->start   = strtotime("-1 month");
             break;
           case "year";
-            $var->post->start = strtotime("-1 year");
+            $var->post->start   = strtotime("-1 year");
             break;
           default;
-            $var->post->start = strtotime("-1 month");
+            $var->post->start   = strtotime("-1 month");
             break;
         }
       }else{
-        $var->post->start     = strtotime("last Month");
+        $var->post->start       = strtotime("last Month");
       }
-      $var->post->end         = strtotime("now");
-      $budgetvm->bandwidth    = $bandwidth->call("v2", "network", "bandwidth", "post", $var);
+      $var->post->end           = strtotime("now");
+      $budgetvm->bandwidth      = $bandwidth->call("v2", "network", "bandwidth", "post", $var);
     }else{
-      $budgetvm->bandwidth    = $bandwidth->call("v2", "network", "bandwidth", "post", $var);
+      $budgetvm->bandwidth      = $bandwidth->call("v2", "network", "bandwidth", "post", $var);
     }
-
-    $serviceAction            = 'get_usage';
-    $templateFile             = 'templates/network.tpl';
+    $serviceAction              = 'get_usage';
+    $templateFile               = 'templates/network.tpl';
   }elseif ($requestedAction == 'power') {
         
     if($_SERVER['REQUEST_METHOD'] == "POST"){
       if($_POST['bootorder'] != "standard"){
         // Custom Boot Order was Requested
-        $bootorder            = new BudgetVM_Api($params['serverpassword']);
-        $var->post->request   = $_POST['bootorder'];
-        $budgetvm->bootorder  = $bootorder->call("v2", "device", "power", "put", $var);
+        $bootorder              = new BudgetVM_Api($params['serverpassword']);
+        $var->post->request     = $_POST['bootorder'];
+        $budgetvm->bootorder    = $bootorder->call("v2", "device", "power", "put", $var);
       }else{
-        $budgetvm->bootorder  = NULL;
+        $budgetvm->bootorder    = NULL;
       }
       // Power Action
-      $update                 = new BudgetVM_Api($params['serverpassword']);
-      $var->post->action      = $_POST['poweraction'];
-      $budgetvm->return       = $update->call("v2", "device", "power", "post", $var);
+      $update                   = new BudgetVM_Api($params['serverpassword']);
+      $var->post->action        = $_POST['poweraction'];
+      $budgetvm->return         = $update->call("v2", "device", "power", "post", $var);
       if($budgetvm->return->success == true){
         if($_POST['bootorder'] != "standard" && !empty($budgetvm->bootorder) && $budgetvm->bootorder->success == true){
           // Power Action with custom boot order
-          $budgetvm->return   = $budgetvm->bootorder->result . " & " . $budgetvm->return->result;
+          $budgetvm->return->result = $budgetvm->bootorder->result . " & " . $budgetvm->return->result;
         }
       }
     }else{
-      $budgetvm->return       = NULL;
+      $budgetvm->return         = NULL;
     }
-    $powerStatus              = new BudgetVM_Api($params['serverpassword']);
-    $budgetvm->powerStatus    = $powerStatus->call("v2", "device", "power", "get", $var);
+    $powerStatus                = new BudgetVM_Api($params['serverpassword']);
+    $budgetvm->powerStatus      = $powerStatus->call("v2", "device", "power", "get", $var);
     
-    $serviceAction            = 'get_usage';
-    $templateFile             = 'templates/power.tpl';
+    $serviceAction              = 'get_usage';
+    $templateFile               = 'templates/power.tpl';
   }elseif ($requestedAction == 'reinstall') {
     if($_SERVER['REQUEST_METHOD'] == "POST"){
-      $cancel                 = $_POST['cancel'];
+      $cancel                   = $_POST['cancel'];
       if(isset($cancel) && $cancel == true){
-        $stop                 = new BudgetVM_Api($params['serverpassword']);
-        $budgetvm->return     = $stop->call("v2", "device", "reload", "delete", $var);
+        $stop                   = new BudgetVM_Api($params['serverpassword']);
+        $budgetvm->return       = $stop->call("v2", "device", "reload", "delete", $var);
       }else{
-        $provision            = new BudgetVM_Api($params['serverpassword']);
-        $var->post->value     = $_POST['profile'];
-        $budgetvm->return     = $provision->call("v2", "device", "reload", "post", $var);
+        $provision              = new BudgetVM_Api($params['serverpassword']);
+        $var->post->value       = $_POST['profile'];
+        $budgetvm->return       = $provision->call("v2", "device", "reload", "post", $var);
         if($budgetvm->return->success == true){
           if($type->result == "dedicated"){
-            $budgetvm->return->result = "System Reinstall Started</br>Root Password: " . $return->result;
+            $budgetvm->return->result = "System Reinstall Started</br>Root Password: " . $budgetvm->return->result;
           }
         }
       }
     }else{
-      $budgetvm->return       = NULL;
+      $budgetvm->return         = NULL;
     }
     if($type->result == "dedicated"){
-      $status                  = new BudgetVM_Api($params['serverpassword']);
-      $budgetvm->status       = $status->call("v2", "device", "reload", "put", $var)->result;
+      $status                   = new BudgetVM_Api($params['serverpassword']);
+      $budgetvm->status         = $status->call("v2", "device", "reload", "put", $var)->result;
     }else{
-      $budgetvm->status       = NULL;
+      $budgetvm->status         = NULL;
     }
-    $profiles                  = new BudgetVM_Api($params['serverpassword']);  
-    $budgetvm->profiles       = $profiles->call("v2", "device", "reload", "get", $var)->result;
+    $profiles                   = new BudgetVM_Api($params['serverpassword']);  
+    $budgetvm->profiles         = $profiles->call("v2", "device", "reload", "get", $var)->result;
     
-    $serviceAction            = 'get_usage';
-    $templateFile             = 'templates/reinstall.tpl';
+    $serviceAction              = 'get_usage';
+    $templateFile               = 'templates/reinstall.tpl';
   }elseif ($requestedAction == 'ipmi') {
     
     if($_SERVER['REQUEST_METHOD'] == "POST"){
       if($type->result == "dedicated"){
         if($_POST['ipmi_reset'] == true){
-          $reset_ipmi         = new BudgetVM_Api($params['serverpassword']);
-          $budgetvm->return   = $reset_ipmi->call("v2", "device", "console", "delete", $var);
+          $reset_ipmi           = new BudgetVM_Api($params['serverpassword']);
+          $budgetvm->return     = $reset_ipmi->call("v2", "device", "console", "delete", $var);
         }elseif($_POST['ipmi_launch'] == true){
-          $launch_ipmi        = new BudgetVM_Api($params['serverpassword']);
-          $budgetvm->return   = $launch_ipmi->call("v2", "device", "console", "get", $var);
+          $launch_ipmi          = new BudgetVM_Api($params['serverpassword']);
+          $budgetvm->return     = $launch_ipmi->call("v2", "device", "console", "get", $var);
           if($budgetvm->return->success == true){
             $launch_ipmi->ipmiLaunch(base64_decode($budgetvm->return->result));
             $budgetvm->return->result  = "KVM Launched, File download started.";
           }
         }elseif($_POST['image_unmount'] == true){
-          $unmount_image      = new BudgetVM_Api($params['serverpassword']);
-          $budgetvm->return   = $unmount_image->call("v2", "device", "iso", "delete", $var);
+          $unmount_image        = new BudgetVM_Api($params['serverpassword']);
+          $budgetvm->return     = $unmount_image->call("v2", "device", "iso", "delete", $var);
         }elseif($_POST['image_mount'] == true){
-          $mount_image        = new BudgetVM_Api($params['serverpassword']);
-          $var->post->image   = $_POST['profile'];
-          $budgetvm->return   = $mount_image->call("v2", "device", "iso", "post", $var);
+          $mount_image          = new BudgetVM_Api($params['serverpassword']);
+          $var->post->image     = $_POST['profile'];
+          $budgetvm->return     = $mount_image->call("v2", "device", "iso", "post", $var);
           
-          $mount_image        = new BudgetVM_Api($params['serverpassword']);
-          $budgetvm->return   = $mount_image->call("v2", "device", "iso", "put", $var);
+          $mount_image          = new BudgetVM_Api($params['serverpassword']);
+          $budgetvm->return     = $mount_image->call("v2", "device", "iso", "put", $var);
         }
       }else{
         if($_POST['ipmi_vm_launch'] == true){
-          $ipmi_vm_launch     = new BudgetVM_Api($params['serverpassword']);
-          $budgetvm->return   = $ipmi_vm_launch->call("v2", "device", "console", "get", $var);
+          $ipmi_vm_launch       = new BudgetVM_Api($params['serverpassword']);
+          $budgetvm->return     = $ipmi_vm_launch->call("v2", "device", "console", "get", $var);
           if($budgetvm->return->success == true){
-            $message          = "<h4>Management Console</h4>";
-            $message          .= "Username: " . $budgetvm->return->result->user . "</br>" . PHP_EOL;
-            $message          .= "Password: " . $budgetvm->return->result->pass . "</br>" . PHP_EOL;
-            $message          .= "Host: <a href='" . $budgetvm->return->result->host . "' target='_blank'>" . $return->result->host . "</a>" . PHP_EOL;
+            $message            = "<h4>Management Console</h4>";
+            $message            .= "Username: " . $budgetvm->return->result->user . "</br>" . PHP_EOL;
+            $message            .= "Password: " . $budgetvm->return->result->pass . "</br>" . PHP_EOL;
+            $message            .= "Host: <a href='" . $budgetvm->return->result->host . "' target='_blank'>" . $budgetvm->return->result->host . "</a>" . PHP_EOL;
             $budgetvm->return->result = $message;
           }
         }
       }
     }else{
-      $budgetvm->return       = NULL;
+      $budgetvm->return         = NULL;
     }
   
-    $images                   = new BudgetVM_Api($params['serverpassword']);
-    $budgetvm->images         = $images->call("v2", "device", "iso", "get", NULL);
-    $status                   = new BudgetVM_Api($params['serverpassword']);
-    $budgetvm->status         = $status->call("v2", "device", "iso", "get", $var);
+    $images                     = new BudgetVM_Api($params['serverpassword']);
+    $budgetvm->images           = $images->call("v2", "device", "iso", "get", NULL);
+    $status                     = new BudgetVM_Api($params['serverpassword']);
+    $budgetvm->status           = $status->call("v2", "device", "iso", "get", $var);
     
-    $serviceAction            = 'get_usage';
-    $templateFile             = 'templates/ipmi.tpl';
+    $serviceAction              = 'get_usage';
+    $templateFile               = 'templates/ipmi.tpl';
   } else {
     // Service Overview
     if($type->success == true){
@@ -915,6 +914,9 @@ function budgetvm_ClientArea(array $params)
         $budgetvm->device       = $device->result;
       }
     }
+    $var->post->start           = strtotime("last Month");
+    $var->post->end             = strtotime("now");
+    $budgetvm->bandwidth        = $bandwidth->call("v2", "network", "bandwidth", "post", $var);
     $status                     = new BudgetVM_Api($params['serverpassword']);
     $status                     = $status->call("v2", "device", "power", "get", $var);
     if($status->success == true && $status->success == true){
