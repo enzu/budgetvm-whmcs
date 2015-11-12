@@ -916,6 +916,7 @@ function budgetvm_ClientArea(array $params)
     }
     $var->post->start           = strtotime("last Month");
     $var->post->end             = strtotime("now");
+    $bandwidth                  = new BudgetVM_Api($params['serverpassword']);
     $budgetvm->bandwidth        = $bandwidth->call("v2", "network", "bandwidth", "post", $var);
     $status                     = new BudgetVM_Api($params['serverpassword']);
     $status                     = $status->call("v2", "device", "power", "get", $var);
