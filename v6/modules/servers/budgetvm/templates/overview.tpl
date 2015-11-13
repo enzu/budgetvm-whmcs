@@ -202,38 +202,6 @@
       </div>
     </div>
   {/if}
-  {if $serverdata}
-    <div class="row">
-      <div class="col-sm-5">
-        {$LANG.servername}
-      </div>
-      <div class="col-sm-7">
-        {$serverdata.hostname}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-5">
-        {$LANG.domainregisternsip}
-      </div>
-      <div class="col-sm-7">
-        {$serverdata.ipaddress}
-      </div>
-    </div>
-    {if $serverdata.nameserver1 || $serverdata.nameserver2 || $serverdata.nameserver3 || $serverdata.nameserver4 || $serverdata.nameserver5}
-      <div class="row">
-        <div class="col-sm-5">
-          {$LANG.domainnameservers}
-        </div>
-        <div class="col-sm-7">
-          {if $serverdata.nameserver1}{$serverdata.nameserver1} ({$serverdata.nameserver1ip})<br />{/if}
-          {if $serverdata.nameserver2}{$serverdata.nameserver2} ({$serverdata.nameserver2ip})<br />{/if}
-          {if $serverdata.nameserver3}{$serverdata.nameserver3} ({$serverdata.nameserver3ip})<br />{/if}
-          {if $serverdata.nameserver4}{$serverdata.nameserver4} ({$serverdata.nameserver4ip})<br />{/if}
-          {if $serverdata.nameserver5}{$serverdata.nameserver5} ({$serverdata.nameserver5ip})<br />{/if}
-        </div>
-      </div>
-    {/if}
-  {/if}
 {/if}
 
 {if $dedicatedip}
