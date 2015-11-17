@@ -549,15 +549,7 @@ function budgetvm_AdminServicesTabFields(array $params)
     $response = array();
 
     // Return an array based on the function's response.
-    return array(
-      'Number of Apples' => (int) $response['numApples'],
-      'Number of Oranges' => (int) $response['numOranges'],
-      'Last Access Date' => date("Y-m-d H:i:s", $response['lastLoginTimestamp']),
-      'Something Editable' => '<input type="hidden" name="budgetvm_original_uniquefieldname" '
-        . 'value="' . htmlspecialchars($response['textvalue']) . '" />'
-        . '<input type="text" name="budgetvm_uniquefieldname"'
-        . 'value="' . htmlspecialchars($response['textvalue']) . '" />',
-    );
+    return array();
   } catch (Exception $e) {
     // Record the error in WHMCS's module log.
     logModuleCall('provisioningmodule', __FUNCTION__, $params, $e->getMessage(), $e->getTraceAsString());
