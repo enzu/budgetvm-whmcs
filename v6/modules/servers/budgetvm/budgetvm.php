@@ -727,7 +727,7 @@ function budgetvm_ClientArea(array $params)
     if($_SERVER['REQUEST_METHOD'] == "POST" && is_array($_POST['update'])){
       $update                   = new BudgetVM_Api($params['serverpassword']);
       $var->post->records       = json_encode($_POST['update']);
-      $budgetvm->return         = $update->call("v2", "dns", "reverse", "post", $var);
+      $budgetvm->return         = $update->call("v2", "dns", "reverse", "put", $var);
       if(is_object($budgetvm->return->result)){
         $fixed                  = "";
         foreach($budgetvm->return->result as $ip=>$ret){
