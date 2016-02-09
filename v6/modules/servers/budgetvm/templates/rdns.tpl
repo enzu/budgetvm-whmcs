@@ -40,7 +40,7 @@
         <label>{$ip}</label>
       </div>
       <div class="col-sm-8">
-        <input type="text" name="update[{$ip}]" value="{$record}" class="form-control">
+        <input type="text" id="update[{$ip}]" name="update[{$ip}]" value="{$record}" class="form-control">
       </div>
     </div>
 {/foreach}
