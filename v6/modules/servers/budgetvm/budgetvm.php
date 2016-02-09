@@ -723,7 +723,6 @@ function budgetvm_ClientArea(array $params)
     $serviceAction              = 'get_usage';
     $templateFile               = 'templates/manage.tpl';
   }elseif ($requestedAction == 'reverse') {
-    
     if($_SERVER['REQUEST_METHOD'] == "POST" && is_array($_POST['update'])){
       $update                   = new BudgetVM_Api($params['serverpassword']);
       $v->post->records         = json_encode($_POST['update']);
