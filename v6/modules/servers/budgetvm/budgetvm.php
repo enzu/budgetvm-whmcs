@@ -915,7 +915,7 @@ function budgetvm_ClientArea(array $params)
     if($status->success == true && $status->success == true){
       $budgetvm->status         = $status->result;
     }else{
-      $budgetvm->status         = "Uknown";
+      $budgetvm->status         = "Unknown";
     }
     $serviceAction              = 'get_stats';
     $templateFile               = 'templates/overview.tpl';
