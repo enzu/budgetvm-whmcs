@@ -57,7 +57,7 @@
       <div class="col-sm-3">
         {$port}
       </div>
-      {if $data->ifAdminStatus == 'Up' && $data->ifOperStatus == 'Up'} 
+      {if $data->ifAdminStatus == 'Up' && $data->ifOperStatus == 'Up'}
         <div class="col-sm-3">
           <span class="label label-success">Port Online - {$data->ifSpeed}</span>
         </div>
@@ -335,13 +335,7 @@
 
 <div class="row">
   <div class="col-sm-4">
-    <form method="post" action="clientarea.php?action=productdetails">
-      <input type="hidden" name="id" value="{$serviceid}" />
-      <input type="hidden" name="customAction" value="manage" />
-      <button type="submit" class="btn btn-default btn-block">
-        Custom Client Area Page
-      </button>
-    </form>
+
   </div>
 
   {if $packagesupgrade}
