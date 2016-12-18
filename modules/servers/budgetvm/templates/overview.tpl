@@ -334,16 +334,7 @@
 <hr>
 
 <div class="row">
-  <div class="col-sm-4">
-    <form method="post" action="clientarea.php?action=productdetails">
-      <input type="hidden" name="id" value="{$serviceid}" />
-      <input type="hidden" name="customAction" value="manage" />
-      <button type="submit" class="btn btn-default btn-block">
-        Custom Client Area Page
-      </button>
-    </form>
-  </div>
-
+  
   {if $packagesupgrade}
     <div class="col-sm-4">
       <a href="upgrade.php?type=package&amp;id={$id}" class="btn btn-success btn-block">
