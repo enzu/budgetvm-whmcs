@@ -13,6 +13,8 @@
 * Add a custom field to the service in your WHMCS named “BudgetVM Service ID” that is Admin Only
 * Goto the product in your clients profile and enter the associated BudgetVM Service ID in the Field called “BudgetVM Service ID”
 
+# Please note this uses a new API Key, must be generated from within the client portal. The v6 keys will not work.
+
 ![WHMCS Setup Step 1](docs/setup1.png)
 ![WHMCS Setup Step 2](docs/setup2.png)
 ![WHMCS Setup Step 3](docs/setup3.png)
