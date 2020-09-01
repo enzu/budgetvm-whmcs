@@ -7,8 +7,8 @@ if(!function_exists("curl_init")){
 class BudgetVM_Api {
 
 	function __construct($key){
-		$this->key						= $key;
-		$this->host						= "https://api.scalabledns.com";
+		$this->key = $key;
+		$this->host = "https://portal.budgetvm.com:8000/api";
 	}
   
   public function ipmiLaunch($data){
@@ -21,8 +21,7 @@ class BudgetVM_Api {
   	echo $data;
   }
   
-	public function call($version, $controller, $function, $method, $var){	
-		$headers['0'] = 'X-API-KEY: ' . $this->key;
+	public function call($version, $controller, $function, $method, $var){
 		if(!isset($method)){
 			return $this->__error("Missing Method");
 		}elseif(!isset($version)){
@@ -32,59 +31,53 @@ class BudgetVM_Api {
 		}elseif(!isset($function)){
 			return $this->__error("Missing Function");
 		}else{
-			switch($method){
-				case "post";
-				case "POST";
-					$post				    = true;
-					$put				    = false;
-					$delete				  = false;
-					break;
-				case "put";
-				case "PUT";
-					$headers['1'] = 'X-HTTP-Method-Override: PUT';
-					$post				    = true;
-					$put				    = true;
-					$delete				  = false;
-					break;
-				case "delete";
-				case "DELETE";
-					$headers['1'] = 'X-HTTP-Method-Override: DELETE';
-					$post				    = true;
-					$put				    = false;
-					$delete				  = true;
-					break;
-				default;
-					$post				    = false;
-					$put				    = false;
-					$delete				  = false;
-					$api->query			= "?";
-					if(isset($var->post)){
-						foreach ($var->post as $k => $v){
-							$api->query .= $k . "=" . $v . "&";
-						}
-						$api->query		= rtrim($api->query, "&");
-					}
-					break;
-			}
-			$this->host					= $this->host . "/" . $version . "/" . $controller . "/" . $function;
+      $api = new stdClass();
+      $headers['0'] = 'X-API-KEY: ' . $this->key;
+      $post = false;
+      $put = false;
+      $delete = false;
+      if( strtolower($method) == 'post' ){
+        $post = true;
+      }else if( strtolower($method) == 'put' ){
+        $post = true;
+        $put = true;
+        $headers['1'] = 'X-HTTP-Method-Override: PUT';
+      }else if( strtolower($method) == 'delete' ){
+        $post = true;
+        $delete = true;
+        $headers['1'] = 'X-HTTP-Method-Override: DELETE';
+      }else{
+        $api->query = "?";
+        if(isset($var->post)){
+          foreach ($var->post as $k => $v){
+            $api->query .= $k . "=" . $v . "&";
+          }
+          $api->query = rtrim($api->query, "&");
+        }
+        $api->query = rtrim($api->query, "?");
+      }
+
+			$this->host = $this->host . "/" . $version . "/" . $controller . "/" . $function;
 			if($post == true){
-				$api->call				= $this->host;
+				$api->call = $this->host;
 				foreach($var->post as $key => $value){
 					$postdata[$key] = $value;
 				}
-				$api->query		    = http_build_query($postdata);
+				$api->query = http_build_query($postdata);
 			}else{
-				$api->call		    = $this->host . $api->query;
+				$api->call = $this->host . $api->query;
 			}
-			$ch							    = curl_init();
+
+      //die($api->call);
+			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $api->call);
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 			if($post == true){				
 				curl_setopt($ch, CURLOPT_POST, 1);
-				curl_setopt($ch, CURLOPT_TIMEOUT, 90);
+				curl_setopt($ch, CURLOPT_TIMEOUT, 15);
 			}else{
 				curl_setopt($ch, CURLOPT_POST, 0);
-				curl_setopt($ch, CURLOPT_TIMEOUT, 90);
+				curl_setopt($ch, CURLOPT_TIMEOUT, 15);
 			}
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			if($put == true){
@@ -103,30 +96,31 @@ class BudgetVM_Api {
 			if(curl_error($ch)){
 				return $this->__error("Connection Error: ".curl_errno($ch).' - '.curl_error($ch));
 			}else{
-				$data             = json_decode(curl_exec($ch));
+				$data = json_decode(curl_exec($ch));
 				curl_close($ch);
 				return $this->__success($data->result);
+				//return $headers['0'];
 			}
 		}
 	}
 	
 	private function __success($var, $count = ""){
-  	$data                 = new stdClass();
-    $data->success        = true;
+  	$data = new stdClass();
+    $data->success = true;
 		if(!empty($count) && is_numeric($count)){
-      $data->results      = $count;
+      $data->results = $count;
 		}else{
-      $data->results      = count((array)$var);
+      $data->results = count((array)$var);
 		}
-		$data->result			    = $var;
+		$data->result = $var;
   	return $data;	
   }
 
   private function __error($msg = "Unknown Error"){
-		$data                 = new stdClass(); 
-    $data->success        = false;
-		$data->results        = "0";
-		$data->result			    = $msg;
+		$data = new stdClass(); 
+    $data->success = false;
+		$data->results = "0";
+		$data->result = $msg;
 		return $data;	
 	}
 }

@@ -9,14 +9,14 @@
     </form>
   </div>
 </div>
-{if isset($budgetvm->return->success)}
+{if !empty($budgetvm->return) }
 <div class="row">
-{if $budgetvm->return->success == true && $budgetvm->return->result ne "Action Failed."}
-  <div class="alert alert-success">
-{else}
+{if $bbudgetvm->failed == true }
   <div class="alert alert-danger">
+{else}
+  <div class="alert alert-success">
 {/if}
-    <p>{$budgetvm->return->result}</p>
+    <p>{$budgetvm->return}</p>
   </div>
 </div>
 {/if}

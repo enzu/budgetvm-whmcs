@@ -77,9 +77,9 @@
     </div>
     <div class="col-sm-4">
       <select id="profile" name="profile" class="form-control">
-  {foreach from=$budgetvm->profiles item=profile}
-        <option value="{$profile->value}">{$profile->name}</option>
-  {/foreach}
+{foreach $os_options as $os}
+        <option value="{$os->value_name}">{$os->display_name}</option>
+{/foreach}
       </select>
     </div>
     <div class="col-sm-4">

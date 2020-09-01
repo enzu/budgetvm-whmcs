@@ -22,6 +22,7 @@
 {/if}
 
 {if $budgetvm->type == "dedicated"}
+<!--
 <div class="row">
   <div class="col-sm-4">
     Current Image Status
@@ -85,6 +86,7 @@
   </div>
 </div>
 {/if}
+-->
 <div class="row" style="padding-top: 25px;">
   <div class="col-sm-6">
     <form class="form-inline" name="reset_ipmi" method="post" action="clientarea.php?action=productdetails&id={$budgetvm->service}&customAction=ipmi" onsubmit="this.reset_ipmi.disabled=true;">
