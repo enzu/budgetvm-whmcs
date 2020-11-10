@@ -115,7 +115,7 @@
   </div>
   <div class="row">
     <div class="col-sm-12">
-      <img src="data:image/png;base64, {$budgetvm->bandwidth->result->graph}">
+      {$budgetvm->bandwidth->result->graph_img}
     </div>
   </div>
 {/if}
