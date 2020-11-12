@@ -8,7 +8,7 @@ class BudgetVM_Api {
 
 	function __construct($key){
 		$this->key = $key;
-		$this->host = "https://portal.budgetvm.com:8000/api";
+		$this->host = "https://portal.budgetvm.com/api";
 	}
   
   public function ipmiLaunch($data){
